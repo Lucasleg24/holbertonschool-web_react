@@ -1,34 +1,44 @@
-// Définition de l'interface Teacher
+// Teacher interface definition
 interface Teacher {
-    // Propriétés obligatoires qui ne peuvent être définies qu'à l'initialisation
+    // Required properties that can only be set during initialization
     readonly firstName: string;
     readonly lastName: string;
     
-    // Autres propriétés obligatoires
+    // Other required properties
     fullTimeEmployee: boolean;
     location: string;
     
-    // Propriété optionnelle
+    // Optional property
     yearsOfExperience?: number;
     
-    // Index signature pour permettre l'ajout de propriétés dynamiques
+    // Index signature to allow dynamic properties
     [key: string]: any;
 }
 
-// Définition de l'interface Directors qui étend Teacher
+// Directors interface extending Teacher
 interface Directors extends Teacher {
-    // Propriété additionnelle requise pour les directeurs
+    // Additional required property for directors
     numberOfReports: number;
 }
 
-// Exemple d'utilisation de l'interface Teacher
+// Interface for the printTeacher function
+interface PrintTeacherFunction {
+    (firstName: string, lastName: string): string;
+}
+
+// Implementation of printTeacher function
+const printTeacher: PrintTeacherFunction = (firstName: string, lastName: string): string => {
+    return `${firstName.charAt(0)}. ${lastName}`;
+};
+
+// Example of using Teacher interface
 const teacher1: Teacher = {
     firstName: "Marie",
     lastName: "Dupont",
     fullTimeEmployee: true,
     location: "Paris",
     yearsOfExperience: 5,
-    contract: true  // Propriété dynamique ajoutée
+    contract: true  // Added dynamic property
 };
 
 const teacher2: Teacher = {
@@ -36,11 +46,11 @@ const teacher2: Teacher = {
     lastName: "Martin",
     fullTimeEmployee: false,
     location: "Lyon",
-    speciality: "Math",  // Une autre propriété dynamique
-    contratType: "CDD"   // Encore une autre propriété dynamique
+    speciality: "Math",  // Another dynamic property
+    contractType: "Fixed-term"  // Yet another dynamic property
 };
 
-// Exemple d'utilisation de l'interface Directors
+// Example of using Directors interface
 const director1: Directors = {
     firstName: "Sophie",
     lastName: "Laurent",
@@ -48,22 +58,22 @@ const director1: Directors = {
     location: "Paris",
     numberOfReports: 5,
     yearsOfExperience: 10,
-    department: "Sciences"  // Propriété dynamique
+    department: "Sciences"  // Dynamic property
 };
 
-// Fonction pour afficher les informations d'un professeur
+// Function to display teacher information
 function displayTeacherInfo(teacher: Teacher): void {
     console.log(`
-        Nom: ${teacher.firstName} ${teacher.lastName}
-        Employé à temps plein: ${teacher.fullTimeEmployee}
-        Localisation: ${teacher.location}
-        ${teacher.yearsOfExperience ? 'Années d\'expérience: ' + teacher.yearsOfExperience : ''}
+        Name: ${teacher.firstName} ${teacher.lastName}
+        Full-time Employee: ${teacher.fullTimeEmployee}
+        Location: ${teacher.location}
+        ${teacher.yearsOfExperience ? 'Years of Experience: ' + teacher.yearsOfExperience : ''}
     `);
     
-    // Définir les propriétés de base de l'interface
+    // Define base interface properties
     const baseProperties: (keyof Teacher)[] = ['firstName', 'lastName', 'fullTimeEmployee', 'location', 'yearsOfExperience'];
     
-    // Afficher les propriétés dynamiques
+    // Display dynamic properties
     Object.keys(teacher).forEach((key) => {
         if (baseProperties.indexOf(key as keyof Teacher) === -1) {
             console.log(`${key}: ${teacher[key]}`);
@@ -71,7 +81,11 @@ function displayTeacherInfo(teacher: Teacher): void {
     });
 }
 
-// Test des objets
+// Testing objects
 displayTeacherInfo(teacher1);
 displayTeacherInfo(teacher2);
-displayTeacherInfo(director1); // Fonctionne aussi avec un directeur car Directors étend Teacher
+displayTeacherInfo(director1); // Works with director as Directors extends Teacher
+
+// Testing printTeacher function
+console.log(printTeacher("John", "Doe")); // Displays: J. Doe
+console.log(printTeacher("Marie", "Dupont")); // Displays: M. Dupont
