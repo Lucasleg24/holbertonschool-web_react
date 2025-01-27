@@ -3,14 +3,14 @@ interface Teacher {
     // Required properties that can only be set during initialization
     readonly firstName: string;
     readonly lastName: string;
-    
+
     // Other required properties
     fullTimeEmployee: boolean;
     location: string;
-    
+
     // Optional property
     yearsOfExperience?: number;
-    
+
     // Index signature to allow dynamic properties
     [key: string]: any;
 }
@@ -26,10 +26,60 @@ interface PrintTeacherFunction {
     (firstName: string, lastName: string): string;
 }
 
+// Interface for the StudentClass constructor
+interface StudentClassConstructor {
+    new (firstName: string, lastName: string): StudentClassInterface;
+}
+
+// Interface for the StudentClass
+interface StudentClassInterface {
+    workOnHomework(): string;
+    displayName(): string;
+}
+
 // Implementation of printTeacher function
 const printTeacher: PrintTeacherFunction = (firstName: string, lastName: string): string => {
     return `${firstName.charAt(0)}. ${lastName}`;
 };
+
+// Function to display teacher information
+function displayTeacherInfo(teacher: Teacher): void {
+    console.log(`
+        Name: ${teacher.firstName} ${teacher.lastName}
+        Full-time Employee: ${teacher.fullTimeEmployee}
+        Location: ${teacher.location}
+        ${teacher.yearsOfExperience ? 'Years of Experience: ' + teacher.yearsOfExperience : ''}
+    `);
+
+    // Define base interface properties
+    const baseProperties: (keyof Teacher)[] = ['firstName', 'lastName', 'fullTimeEmployee', 'location', 'yearsOfExperience'];
+
+    // Display dynamic properties
+    Object.keys(teacher).forEach((key) => {
+        if (baseProperties.indexOf(key as keyof Teacher) === -1) {
+            console.log(`${key}: ${teacher[key]}`);
+        }
+    });
+}
+
+// Implementation of StudentClass
+class StudentClass implements StudentClassInterface {
+    private firstName: string;
+    private lastName: string;
+
+    constructor(firstName: string, lastName: string) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    workOnHomework(): string {
+        return "Currently working";
+    }
+
+    displayName(): string {
+        return this.firstName;
+    }
+}
 
 // Example of using Teacher interface
 const teacher1: Teacher = {
@@ -61,26 +111,6 @@ const director1: Directors = {
     department: "Sciences"  // Dynamic property
 };
 
-// Function to display teacher information
-function displayTeacherInfo(teacher: Teacher): void {
-    console.log(`
-        Name: ${teacher.firstName} ${teacher.lastName}
-        Full-time Employee: ${teacher.fullTimeEmployee}
-        Location: ${teacher.location}
-        ${teacher.yearsOfExperience ? 'Years of Experience: ' + teacher.yearsOfExperience : ''}
-    `);
-    
-    // Define base interface properties
-    const baseProperties: (keyof Teacher)[] = ['firstName', 'lastName', 'fullTimeEmployee', 'location', 'yearsOfExperience'];
-    
-    // Display dynamic properties
-    Object.keys(teacher).forEach((key) => {
-        if (baseProperties.indexOf(key as keyof Teacher) === -1) {
-            console.log(`${key}: ${teacher[key]}`);
-        }
-    });
-}
-
 // Testing objects
 displayTeacherInfo(teacher1);
 displayTeacherInfo(teacher2);
@@ -89,3 +119,8 @@ displayTeacherInfo(director1); // Works with director as Directors extends Teach
 // Testing printTeacher function
 console.log(printTeacher("John", "Doe")); // Displays: J. Doe
 console.log(printTeacher("Marie", "Dupont")); // Displays: M. Dupont
+
+// Testing StudentClass
+const student1 = new StudentClass("Alice", "Lemoine");
+console.log(student1.displayName()); // Displays: Alice
+console.log(student1.workOnHomework()); // Displays: Currently working
