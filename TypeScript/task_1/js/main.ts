@@ -15,7 +15,13 @@ interface Teacher {
     [key: string]: any;
 }
 
-// Exemple d'utilisation de l'interface
+// Définition de l'interface Directors qui étend Teacher
+interface Directors extends Teacher {
+    // Propriété additionnelle requise pour les directeurs
+    numberOfReports: number;
+}
+
+// Exemple d'utilisation de l'interface Teacher
 const teacher1: Teacher = {
     firstName: "Marie",
     lastName: "Dupont",
@@ -34,6 +40,17 @@ const teacher2: Teacher = {
     contratType: "CDD"   // Encore une autre propriété dynamique
 };
 
+// Exemple d'utilisation de l'interface Directors
+const director1: Directors = {
+    firstName: "Sophie",
+    lastName: "Laurent",
+    fullTimeEmployee: true,
+    location: "Paris",
+    numberOfReports: 5,
+    yearsOfExperience: 10,
+    department: "Sciences"  // Propriété dynamique
+};
+
 // Fonction pour afficher les informations d'un professeur
 function displayTeacherInfo(teacher: Teacher): void {
     console.log(`
@@ -42,10 +59,10 @@ function displayTeacherInfo(teacher: Teacher): void {
         Localisation: ${teacher.location}
         ${teacher.yearsOfExperience ? 'Années d\'expérience: ' + teacher.yearsOfExperience : ''}
     `);
-
+    
     // Définir les propriétés de base de l'interface
     const baseProperties: (keyof Teacher)[] = ['firstName', 'lastName', 'fullTimeEmployee', 'location', 'yearsOfExperience'];
-
+    
     // Afficher les propriétés dynamiques
     Object.keys(teacher).forEach((key) => {
         if (baseProperties.indexOf(key as keyof Teacher) === -1) {
@@ -57,3 +74,4 @@ function displayTeacherInfo(teacher: Teacher): void {
 // Test des objets
 displayTeacherInfo(teacher1);
 displayTeacherInfo(teacher2);
+displayTeacherInfo(director1); // Fonctionne aussi avec un directeur car Directors étend Teacher
