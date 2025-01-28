@@ -56,8 +56,22 @@ function isDirector(employee: Director | Teacher): employee is Director {
     }
   }
 
+// Définir le type littéral pour les sujets
+type Subjects = "Math" | "History";
+
+// Fonction teachClass
+function teachClass(todayClass: Subjects): string {
+  if (todayClass === "Math") {
+    return "Teaching Math";
+  } else if (todayClass === "History") {
+    return "Teaching History";
+  }
+}
+
 console.log(createEmployee(200));
 console.log(createEmployee(1000));
 console.log(createEmployee('$500'));
 console.log(executeWork(createEmployee(200)));
 console.log(executeWork(createEmployee(1000)));
+console.log(teachClass('Math'));
+console.log(teachClass('History'));
